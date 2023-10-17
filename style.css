@@ -1,7 +1,8 @@
 body {
     margin: 0;
     padding: 0;
-    background-image: url('obrazki/tlo.jpg');
+    background-image: url('obrazki/tla/01.jpg');
+	background-color: #000033;
     background-size: cover;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
@@ -69,7 +70,7 @@ h3 {
 	background-color: rgba(0, 0, 0, 0.35);
 }
 
-p {
+.tresc p {
 	background-color: rgba(0, 0, 0, 0.25);
 }
 
@@ -80,10 +81,14 @@ p {
 	background-color: rgba(0, 0, 0, 0);
 }
 
-.tresc img {
+.tresc img{
 	width:50%;
 	align: left;
 	height: auto;
+}
+
+.obrazek:hover {
+	cursor: pointer;
 }
 
 .contact-form {
