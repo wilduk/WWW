@@ -7,47 +7,18 @@
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 		<meta http-equiv="Content-Language" content="pl" />
 		<link rel="stylesheet" type="text/css" href="style.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="kodzik.js" type="text/javascript"></script>
 	</head>
-
-	<body onload="startclock()">
-		<table class="szkielet" border="0">
-			<tr>
-				<td colspan="2" class="naglowek">
-					<h1>Hodowla żółwia wodnego</h1>
-				</td>
-			</tr>
-			<tr>
-				<td class="menu">
-					<p id="data"></p>
-					<p id="zegarek"></p>
-					<h2>Menu</h2>
-					<ul>
-						<li><a href="main.html">Strona Główna</a></li>
-						<li><a href="historia.html">O Nas</a></li>
-						<li><a href="zolwie.html">Nasze Podopieczne</a></li>
-						<li><a href="dbanie.html">Jak Zadbać o Żółwie</a></li>
-						<li><a href="sukcesy.html">Nasze Sukcesy</a></li>
-						<li><a href="zdjecia.html">Zdjęcia</a></li>
-					</ul>
-				</td>
-				<td class="tresc">
-					<h2>Witaj na naszej stronie poświęconej pasji hodowli żółwi wodnych. Razem z nami odkryjesz fascynujący świat tych uroczych stworzeń i dowiesz się, jak możemy pomóc ci zacząć swoją przygodę z hodowlą żółwi.</h2>
-					<img src="obrazki/01.jpg">
-					<p class="podpis"> żółw Bartek </p>
-					<form method="POST" NAME="background">
-						<input type="button" value = "plytko" onclick="changeBackground('01')">
-						<input type="button" value = "zielono" onclick="changeBackground('02')">
-						<input type="button" value = "niebiesko" onclick="changeBackground('03')">
-						<input type="button" value = "ryby" onclick="changeBackground('04')">
-					</form>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2" class="stopka">
-					<p>Wszelkie prawa nie istnieją (anarchia) &copy; 2023 Łukasz Łuckiewicz</p>
-				</td>
-			</tr>
-		</table>
+	<body onload="loadsite()">
+		<h2>Witaj na naszej stronie poświęconej pasji hodowli żółwi wodnych. Razem z nami odkryjesz fascynujący świat tych uroczych stworzeń i dowiesz się, jak możemy pomóc ci zacząć swoją przygodę z hodowlą żółwi.</h2>
+		<img src="obrazki/01.jpg">
+		<p class="podpis"> żółw Bartek </p>
+		<form method="POST" NAME="background">
+			<input type="button" value = "plytko" onclick="changeBackground('01')">
+			<input type="button" value = "zielono" onclick="changeBackground('02')">
+			<input type="button" value = "niebiesko" onclick="changeBackground('03')">
+			<input type="button" value = "ryby" onclick="changeBackground('04')">
+		</form>
 	</body>
 </html>

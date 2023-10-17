@@ -1,17 +1,8 @@
 <html>
-	<head>
-		<title>żółwie wodne moją pasją</title>
-		<link rel="icon" type="image/png" href="obrazki/icon.png">
-		<meta name="keywords" content="żółwie">
-		<meta name="author" content="Łukasz Łuckiewicz">
-		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-		<meta http-equiv="Content-Language" content="pl" />
-		<link rel="stylesheet" type="text/css" href="style.css">
-		<script src="kodzik.js" type="text/javascript"></script>
-	</head>
-
-	<body onload="startclock()">
-		<table class="szkielet" border="0">
+	<body>
+		<p id="cover">
+		</p>
+		<table class="szkielet">
 			<tr>
 				<td colspan="2" class="naglowek">
 					<h1>Hodowla żółwia wodnego</h1>
@@ -19,17 +10,32 @@
 			</tr>
 			<tr>
 				<td class="menu">
-					<p id="data"></p>
-					<p id="zegarek"></p>
+					<p id="data" class="przybliz"></p>
+					<p id="zegarek" class="przybliz"></p>
 					<h2>Menu</h2>
 					<ul>
-						<li><a href="main.html">Strona Główna</a></li>
-						<li><a href="historia.html">O Nas</a></li>
-						<li><a href="zolwie.html">Nasze Podopieczne</a></li>
-						<li><a href="dbanie.html">Jak Zadbać o Żółwie</a></li>
-						<li><a href="sukcesy.html">Nasze Sukcesy</a></li>
-						<li><a href="zdjecia.html">Zdjęcia</a></li>
+						<li class="przybliz"><a href="main.html">Strona Główna</a></li>
+						<li class="przybliz"><a href="historia.html">O Nas</a></li>
+						<li class="przybliz"><a href="zolwie.html">Nasze Podopieczne</a></li>
+						<li class="przybliz"><a href="dbanie.html">Jak Zadbać o Żółwie</a></li>
+						<li class="przybliz"><a href="sukcesy.html">Nasze Sukcesy</a></li>
+						<li class="przybliz"><a href="zdjecia.html">Zdjęcia</a></li>
+						<li class="przybliz"><a href="kontakt.html">Kontakt</a></li>
 					</ul>
+					<script>
+						$(".przybliz").on({
+						"mouseover": function(){
+							$(this).animate({
+								'font-size': "20px"
+							},50);
+						},
+						"mouseout": function(){
+							$(this).animate({
+								'font-size': "16px"
+							},50);
+						}
+						});
+					</script>
 				</td>
 				<td class="tresc" id="tresc">
 				</td>
@@ -38,6 +44,13 @@
 				<td colspan="2" class="stopka">
 					<p>Wszelkie prawa nie istnieją (anarchia) &copy; 2023 Łukasz Łuckiewicz</p>
 				</td>
+				<script>
+					$(".stopka").on("click", function(){
+						$(this).animate({
+							'font-size': "+=1px"
+						},50);
+					});
+				</script>
 			</tr>
 		</table>
 	</body>
