@@ -160,7 +160,7 @@
         }
         echo '</table></form>';
         echo '<form method="post" name="Wyloguj" encrype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'">
-        <tr><td>&nbsp;</td><td><input type="submit" name="dodaj_kategorie" class="logowanie" value="Dodaj nowy produkt"/></td></tr>
+        <tr><td>&nbsp;</td><td><input type="submit" name="dodaj_kategorie" class="logowanie" value="Dodaj nową kategorię"/></td></tr>
         </form>';
     }
 
@@ -211,11 +211,98 @@
         }
     }
 
+    //produkty
+    
+    function ListaProduktow(){
+        $conn = GetConn();
+        $query="SELECT * FROM products LIMIT 100";
+        $result = mysqli_query($conn,$query);
+        echo '<form method="post" encrype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'"><table>';
+        while($row = mysqli_fetch_array($result)){
+            echo '<tr><td>'.$row['id'].'</td><td>'.$row['nazwa'].
+                '</td><td><button type="submit" name="usun_produkt" class="logowanie" value="'.$row['id'].'"/>usuń</button>'.
+                '</td><td><button type="submit" name="edytuj_produkt" class="logowanie" value="'.$row['id'].'">edytuj</button></td></tr>';
+        }
+        echo '</table></form>';
+        echo '<form method="post" name="Wyloguj" encrype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'">
+        <tr><td>&nbsp;</td><td><input type="submit" name="dodaj_produkt" class="logowanie" value="Dodaj nowy produkt"/></td></tr>
+        </form>';
+    }
+
+    function EdytujProdukt($id){
+        $query='SELECT * FROM products WHERE id = '.$id;
+        $row;
+        if($id == 0){
+            $row = [
+                "id" => 0,
+                "nazwa" => "",
+                "opis" => "",
+                "data_wygasniecia" => "2100-12-31",
+                "cena_netto" => 0.00,
+                "vat" => 0.00,
+                "ilosc" => 0,
+                "status" => 0,
+                "kategoria" => 0,
+                "gabaryt" => 0,
+                "zdj" => ""
+            ];
+        }
+        else{
+            $conn = GetConn();
+            $result = mysqli_query($conn,$query);
+            $row = mysqli_fetch_array($result);
+        }
+        $dodaj = "";
+        if($row['status'] == 1){
+            $dodaj = " checked";
+        }
+        return '
+        <div class="logowanie">
+         <div class="logowanie">
+          <form method="post" encrype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'">
+           <table class="logowanie">
+           <input type="hidden" name="id" value="'.$row['id'].'" />
+            <tr><td class="log4_t">[nazwa]</td><td><input type="text" name="produkt_name" class="logowanie" required value="'.$row['nazwa'].'"/></td></tr>
+            <tr><td class="log4_t">[opis]</td><td><textarea name="opis" class="logowanie" required>'.$row['opis'].'</textarea></td></tr>
+            <tr><td class="log4_t">[data wygaśnięcia]</td><td><input type="date" name="exp_date" class="logowanie" required value="'.$row['data_wygasniecia'].'"/></td></tr>
+            <tr><td class="log4_t">[cena netto]</td><td><input type="number" name="netto" min="0" step="0.01" class="logowanie" required value="'.$row['cena_netto'].'"/></td></tr>
+            <tr><td class="log4_t">[vat]</td><td><input type="number" name="vat" min="0" step="0.01" class="logowanie" required value="'.$row['vat'].'"/></td></tr>
+            <tr><td class="log4_t">[ilość na magazynie]</td><td><input type="number" name="ilosc" min="0" step="1" class="logowanie" required value="'.$row['ilosc'].'"/></td></tr>
+            <tr><td class="log4_t">[status]</td><td><input type="checkbox" name="produkt_status" class="logowanie"'.$dodaj.'/></td></tr>
+            <tr><td class="log4_t">[kategoria]</td><td><input type="number" name="kategoria" min="0" step="1" class="logowanie" required value="'.$row['kategoria'].'"/></td></tr>
+            <tr><td class="log4_t">[gabaryt]</td><td><input type="number" name="gabaryt" min="0" step="0.01" class="logowanie" required value="'.$row['gabaryt'].'"/></td></tr>
+            <tr><td class="log4_t">[zdjęcie]</td><td><textarea name="zdj" class="logowanie" required>'.$row['zdj'].'</textarea></td></tr>
+            <tr><td>&nbsp;</td><td><input type="submit" name="x1_submit" class="logowanie" value="Wyślij"/></td></tr>
+           </table>
+          </form>
+         </div>
+        </div>
+        ';
+    }
+
+    function DodajNowyProdukt(){
+        return EdytujProdukt(0);
+    }
+
+    function UsunProdukt($id){
+        $conn = GetConn();
+        $query = 'DELETE FROM products WHERE id='.$id.' LIMIT 1';
+        $result = mysqli_query($conn, $query);
+        if($result) {
+            echo "Record with id $id deleted successfully!";
+        }
+        else {
+            echo "Error";
+        }
+    }
+
     function PokazListy(){
         echo "<h1>Podstrony:</h1>";
         ListaPodstron();
         echo "<h1>Kategorie:</h1>";
         ListaKategorii();
+        echo "<h1>Produkty:</h1>";
+        ListaProduktow();
     }
 ?>
 
@@ -252,6 +339,10 @@
             UsunKategorie($_POST['usun_kategorie']);
         }
         
+        elseif(CheckPost('usun_produkt')){
+            UsunProdukt($_POST['usun_produkt']);
+        }
+        
         // ||--------------Ekran Edytowania Strony--------------||
         if(isset($_POST['edytuj'])){
             echo EdytujPodstrone($_POST['edytuj']);
@@ -259,6 +350,10 @@
         
         elseif(isset($_POST['edytuj_kategorie'])){
             echo EdytujKategorie($_POST['edytuj_kategorie']);
+        }
+        
+        elseif(isset($_POST['edytuj_produkt'])){
+            echo EdytujProdukt($_POST['edytuj_produkt']);
         }
         
         // ||--------------Ekran Tworzenia Strony--------------||
@@ -269,6 +364,11 @@
         elseif(CheckPost('dodaj_kategorie')){
             echo DodajNowaKategorie();
         }
+        
+        elseif(CheckPost('dodaj_produkt')){
+            echo DodajNowyProdukt();
+        }
+        
         // ||--------------Tworzenie I Edytowanie Strony--------------||
         elseif(CheckPost('id') and CheckPost('tytul') and CheckPost('content')){
             $conn = GetConn();
@@ -292,6 +392,51 @@
             }
             PokazListy();
         }  
+        elseif(CheckPost('id') and CheckPost('produkt_name') and CheckPost('opis') and CheckPost('exp_date') and CheckPost('netto') and CheckPost('vat') and CheckPost('ilosc') and CheckPost('produkt_status') and CheckPost('kategoria') and CheckPost('gabaryt') and CheckPost('zdj')){
+            $conn = GetConn();
+            $query = "";
+            $bool = 0;
+            if(isset($_POST['produkt_status'])){
+                $bool = 1;
+            }
+            if($_POST['id'] == 0){
+                $query = 'INSERT INTO products(nazwa, opis, data_modyfikacji, data_wygasniecia, cena_netto, vat, ilosc, status, kategoria, gabaryt, zdj)
+                VALUES("'.addslashes($_POST['produkt_name']).'",
+                "'.addslashes($_POST['opis']).'",
+                "'.date("Y-m-d").'",
+                "'.addslashes($_POST['exp_date']).'",
+                "'.addslashes($_POST['netto']).'",
+                "'.addslashes($_POST['vat']).'",
+                "'.addslashes($_POST['ilosc']).'",
+                "'.$bool.'",
+                "'.addslashes($_POST['kategoria']).'",
+                "'.addslashes($_POST['gabaryt']).'",
+                "'.addslashes($_POST['zdj']).'");';
+            }
+            else{
+                $query='UPDATE products SET
+                nazwa="'.addslashes($_POST['produkt_name']).'",
+                opis="'.addslashes($_POST['opis']).'",
+                data_wygasniecia="'.date("Y-m-d").'",
+                data_modyfikacji="'.addslashes($_POST['exp_date']).'",
+                cena_netto="'.addslashes($_POST['netto']).'",
+                vat="'.addslashes($_POST['vat']).'",
+                ilosc="'.addslashes($_POST['ilosc']).'",
+                status="'.$bool.'",
+                kategoria="'.addslashes($_POST['kategoria']).'",
+                gabaryt="'.addslashes($_POST['gabaryt']).'",
+                zdj="'.addslashes($_POST['zdj']).'" 
+                WHERE id='.$_POST['id'].' LIMIT 1';
+            }
+            $result = mysqli_query($conn, $query);
+            if($result) {
+                echo "Record updated successfully";
+            }
+            else {
+                echo "Error";
+            }
+            PokazListy();
+        }
         elseif(CheckPost('id') and CheckPost('nazwa') and CheckPost('matka')){
             $conn = GetConn();
             $query = "";
@@ -309,7 +454,7 @@
                 echo "Error";
             }
             PokazListy();
-        }  
+        }
         // ||--------------Pokazanie Listy Stron I Produktów--------------||
         else{
             PokazListy();
