@@ -86,11 +86,17 @@ function showtime(){
 
 // ||--------------Wklejenie Strony Do Szablonu--------------||
 
-function loadsite(){
+function loadsite(lista){
+    var linki = "";
+    lista.forEach(function(val){
+        linki += '<li class="przybliz"><a href="?id='+val[0]+'">'+val[1]+'</a></li>\n';
+    })
+    console.log(linki);
 	$.get('html/template.html', function(data){
 		if (!$('.tresc').html()) {
             var content = $('body').html();
 			$('body').html(data);
+            $('.strony').html(linki);
             $('.tresc').html(content);
             startclock();
         }

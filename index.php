@@ -35,6 +35,17 @@
 	$nrGrupy = '1';
 	
 	echo('Autor: Łukasz Łuckiewicz '.$nr_indeksu.' grupa '.$nrGrupy.' <br /><br />');
+
+function Podstrony(){
+    $conn = GetConn();
+    $query="SELECT * FROM page_list where status = 1 LIMIT 100";
+    $result = mysqli_query($conn,$query);
+    $lista = [];
+    while($row = mysqli_fetch_array($result)){
+        $lista[] = [$row['id'], $row['page_title']];
+    }
+    return $lista;
+}
 ?>
 
 <html>
@@ -53,7 +64,16 @@
 	<body>
 	<?php
         // ||--------------Template Strony Do Wypełnienia--------------||
-		echo("<script>loadsite()</script>");
+        echo '<script>
+        const lista = [';
+        $text = "";
+        foreach(Podstrony() as $strona){
+            $text .= '['.$strona[0].', "'.$strona[1].'"],';
+        }
+        $text = substr_replace($text ,"",-1);
+        echo $text,']
+            loadsite(lista)</script>
+            </script>';
 	?>
 	</body>
 </html>
