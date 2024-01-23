@@ -40,7 +40,6 @@
         <form method="post" name="Wyloguj" encrype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'">
            <table class="logowanie">
             <tr><td>&nbsp;</td><td><input type="submit" name="wyloguj" class="logowanie" value="Wyloguj"/></td></tr>
-            <tr><td>&nbsp;</td><td><input type="submit" name="dodaj" class="logowanie" value="Dodaj nową stronę"/></td></tr>
            </table>
           </form>
         ';
@@ -59,6 +58,9 @@
                 '</td><td><button type="submit" name="edytuj" class="logowanie" value="'.$row['id'].'">edytuj</button></td></tr>';
         }
         echo '</table></form>';
+        echo '<form method="post" name="Wyloguj" encrype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'">
+        <tr><td>&nbsp;</td><td><input type="submit" name="dodaj" class="logowanie" value="Dodaj nową stronę"/></td></tr>
+        </form>';
     }
 
 // ||--------------Funkcja Edytująca Stronę W Bazie Danych--------------||
@@ -129,6 +131,92 @@
             echo "Error";
         }
     }
+
+    function PokazKategorie($id, $nazwa, $poziom){
+        $conn = GetConn();
+        $query = "SELECT * FROM categories WHERE matka = ".$id." LIMIT 100";
+        $result = mysqli_query($conn,$query);
+        $text = '<tr>';
+        $text .= '<td>';
+        for($i = 0; $i < $poziom; $i++){
+            $text .= "-";
+        }
+        $text .= $id.'</td><td>'.$nazwa;
+        $text .= '</td><td><button type="submit" name="usun_kategorie" class="logowanie" value="'.$id.'"/>usuń</button>';
+        $text .= '</td><td><button type="submit" name="edytuj_kategorie" class="logowanie" value="'.$id.'">edytuj</button></td></tr>';
+        echo $text;
+        while($row = mysqli_fetch_array($result)){
+            PokazKategorie($row['id'], $row['nazwa'], $poziom+1);
+        }
+    }
+    
+    function ListaKategorii(){
+        $conn = GetConn();
+        $query="SELECT * FROM categories WHERE matka = 0 LIMIT 100";
+        $result = mysqli_query($conn,$query);
+        echo '<form method="post" encrype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'"><table>';
+        while($row = mysqli_fetch_array($result)){
+            PokazKategorie($row['id'], $row['nazwa'], 0);
+        }
+        echo '</table></form>';
+        echo '<form method="post" name="Wyloguj" encrype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'">
+        <tr><td>&nbsp;</td><td><input type="submit" name="dodaj_kategorie" class="logowanie" value="Dodaj nowy produkt"/></td></tr>
+        </form>';
+    }
+
+    function EdytujKategorie($id){
+        $query='SELECT * FROM categories WHERE id = '.$id;
+        $row;
+        if($id == 0){
+            $row = [
+                "id" => 0,
+                "matka" => 0,
+                "nazwa" => ""
+            ];
+        }
+        else{
+            $conn = GetConn();
+            $result = mysqli_query($conn,$query);
+            $row = mysqli_fetch_array($result);
+        }
+        return '
+        <div class="logowanie">
+         <div class="logowanie">
+          <form method="post" encrype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'">
+           <table class="logowanie">
+           <input type="hidden" name="id" value="'.$row['id'].'" />
+            <tr><td class="log4_t">[nazwa]</td><td><input type="text" name="nazwa" class="logowanie" required value="'.$row['nazwa'].'"/></td></tr>
+            <tr><td class="log4_t">[matka]</td><td><input type="number" name="matka" class="logowanie" value="'.$row['matka'].'"/></td></tr>
+            <tr><td>&nbsp;</td><td><input type="submit" name="x1_submit" class="logowanie" value="Wyślij"/></td></tr>
+           </table>
+          </form>
+         </div>
+        </div>
+        ';
+    }
+
+    function DodajNowaKategorie(){
+        return EdytujKategorie(0);
+    }
+
+    function UsunKategorie($id){
+        $conn = GetConn();
+        $query = 'DELETE FROM categories WHERE id='.$id.' LIMIT 1';
+        $result = mysqli_query($conn, $query);
+        if($result) {
+            echo "Record with id $id deleted successfully!";
+        }
+        else {
+            echo "Error";
+        }
+    }
+
+    function PokazListy(){
+        echo "<h1>Podstrony:</h1>";
+        ListaPodstron();
+        echo "<h1>Kategorie:</h1>";
+        ListaKategorii();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -160,14 +248,26 @@
             UsunPodstrone($_POST['usun']);
         }
         
+        elseif(CheckPost('usun_kategorie')){
+            UsunKategorie($_POST['usun_kategorie']);
+        }
+        
         // ||--------------Ekran Edytowania Strony--------------||
         if(isset($_POST['edytuj'])){
             echo EdytujPodstrone($_POST['edytuj']);
         }
         
+        elseif(isset($_POST['edytuj_kategorie'])){
+            echo EdytujKategorie($_POST['edytuj_kategorie']);
+        }
+        
         // ||--------------Ekran Tworzenia Strony--------------||
         elseif(CheckPost('dodaj')){
             echo DodajNowaPodstrone();
+        }
+        
+        elseif(CheckPost('dodaj_kategorie')){
+            echo DodajNowaKategorie();
         }
         // ||--------------Tworzenie I Edytowanie Strony--------------||
         elseif(CheckPost('id') and CheckPost('tytul') and CheckPost('content')){
@@ -190,11 +290,29 @@
             else {
                 echo "Error";
             }
-            ListaPodstron();
+            PokazListy();
         }  
-        // ||--------------Pokazanie Listy Stron--------------||
+        elseif(CheckPost('id') and CheckPost('nazwa') and CheckPost('matka')){
+            $conn = GetConn();
+            $query = "";
+            if($_POST['id'] == 0){
+                $query = 'INSERT INTO categories(matka, nazwa) VALUES("'.addslashes($_POST['matka']).'","'.addslashes($_POST['nazwa']).'");';
+            }
+            else{
+                $query='UPDATE categories SET nazwa="'.addslashes($_POST['nazwa']).'",matka="'.addslashes($_POST['matka']).'" WHERE id='.$_POST['id'].' LIMIT 1';
+            }
+            $result = mysqli_query($conn, $query);
+            if($result) {
+                echo "Record updated successfully";
+            }
+            else {
+                echo "Error";
+            }
+            PokazListy();
+        }  
+        // ||--------------Pokazanie Listy Stron I Produktów--------------||
         else{
-            echo ListaPodstron();
+            PokazListy();
         }
         // ||--------------Wczytanie Przycisku Wylogowywania--------------||
         echo Wylogowywanie();
