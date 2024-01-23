@@ -3,6 +3,8 @@
 $login = "admin";
 $pass = "nie_admin";
 
+// ||--------------Pobranie Połączenia Z Bazą Danych--------------||
+
 function GetConn(){
     $dbhost = 'localhost';
     $dbuser = 'root';

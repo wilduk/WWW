@@ -1,3 +1,5 @@
+//stare zadanie z laba4
+
 <?php
 	$nr_indeksu = '164404';
 	$nrGrupy = '1';

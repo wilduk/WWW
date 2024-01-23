@@ -1,6 +1,8 @@
 var computed = false;
 var decimal = 0;
 
+// ||--------------Funkcje Pomocnicze--------------||
+
 function convert(entityform, from, to){
 	var convertfrom = from.selectedIndex;
 	var convertto = to.selectedIndex;
@@ -22,12 +24,14 @@ function openvothcom(){
 	window.open("","Display widow","toolbar=no,directories=no,menubar=no");
 }
 
+// ||--------------Czyszczenie Zegara--------------||
 function clear(form){
 	form.input.value = 0;
 	form.display.value = 0;
 	decimal = 0;
 }
 
+// ||--------------Zmiana Tła Strony--------------||
 function changeBackground(number){
 	if(number === null){
 		number = "01"
@@ -36,6 +40,7 @@ function changeBackground(number){
 	localStorage.setItem('background', number);
 }
 
+// ||--------------Funkcje Zegara--------------||
 function gettheDate(){
 	Todays = new Date();
 	TheDate = "" + (Todays.getMonth()+1) +" / "+ Todays.getDate() + " / " +(Todays.getYear()-100);
@@ -63,7 +68,14 @@ function showtime(){
 	var hours = now.getHours();
 	var minutes = now.getMinutes();
 	var seconds = now.getSeconds();
-	var timeValue = ""+ (hours >12) ? hours-12 : hours
+	var timeValue = ""
+    
+    if(hours > 12){
+        timeValue+=(hours-12)
+    }
+    else{
+        timeValue+=(hours)
+    }
 	timeValue += (minutes < 10) ? ":0"+minutes : ":" + minutes
 	timeValue += (seconds < 10) ? ":0"+seconds : ":" + seconds
 	timeValue += (hours >= 12) ? "PM" : "AM"
@@ -71,6 +83,8 @@ function showtime(){
 	timerID = setTimeout("showtime()",1000);
 	timerRunning = true;
 }
+
+// ||--------------Wklejenie Strony Do Szablonu--------------||
 
 function loadsite(){
 	$.get('html/template.html', function(data){
@@ -88,11 +102,13 @@ function loadsite(){
 	startclock();
 }
 
+// ||--------------Operacje Na Rozmiarze--------------||
 var $on = false;
 var $db = false;
 document.addEventListener("click", function (event) {
     if($db){return};
     $db = true;
+    // ||--------------Przybliżenie Obrazka--------------||
 	if(event.target.tagName === "IMG") {
 		var $img = $(event.target);
 		if($on === false){
@@ -108,6 +124,7 @@ document.addEventListener("click", function (event) {
 			$("#cover").css("z-index", '5');
 			$on = true;
 		} else{
+            // ||--------------Przyciemnianie Tła--------------||
 			$("#picked").animate({
 				width: "50%"
 			},1500);

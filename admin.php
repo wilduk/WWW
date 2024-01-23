@@ -3,14 +3,17 @@
     if(!isset($_SESSION)){
         session_start();
     }
+
     if(!isset($_SESSION['confirmed'])){
         $_SESSION['confirmed'] = false;
     }
 
-    include("cfg.php");
+    include("php/cfg.php");
     
     $cfgpass = $pass;
     $cfglogin = $login;
+
+// ||--------------Ekran Logowania--------------||
 
     function Logowanie(){
         $wynik = '
@@ -30,6 +33,8 @@
         return $wynik;
     }
 
+// ||--------------Funkcja Do Wylogowywania--------------||
+
     function Wylogowywanie(){
         return '<br/>
         <form method="post" name="Wyloguj" encrype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'">
@@ -40,6 +45,8 @@
           </form>
         ';
     }
+
+// ||--------------Listowanie Stron Z Bazy Danych--------------||
 
     function ListaPodstron(){
         $conn = GetConn();
@@ -53,6 +60,8 @@
         }
         echo '</table></form>';
     }
+
+// ||--------------Funkcja Edytująca Stronę W Bazie Danych--------------||
 
     function EdytujPodstrone($id){
         $query='SELECT * FROM page_list WHERE id = '.$id;
@@ -92,6 +101,8 @@
         ';
     }
 
+// ||--------------Sprawdzanie Czy Zmienna POST Istnieje--------------||
+
     function CheckPost($val){
         if(isset($_POST[$val])){
             return true;
@@ -99,9 +110,13 @@
         return false;
     }
 
+// ||--------------Dodawanie Nowej Strony Do Bazy Danych--------------||
+
     function DodajNowaPodstrone(){
         return EdytujPodstrone(0);
     }
+
+// ||--------------Usuwanie Strony Z Bazy Danych--------------||
 
     function UsunPodstrone($id){
         $conn = GetConn();
@@ -114,16 +129,6 @@
             echo "Error";
         }
     }
-
-//function ListaPodstron(){
-//        $conn = GetConn();
-//        $query="SELECT * FROM page_list LIMIT 100";
-//        $result = mysqli_query($conn,$query);
-//        while($row = mysqli_fetch_array($result)){
-//            echo $row['id'].' '.$row['page_title'].'<input type="button" name="usuń" value="usun"></input> <button name="edytuj" value="edytuj"></input>'.' <br/>';
-//        }
-//    }
-    
 ?>
 
 <!DOCTYPE html>
@@ -131,27 +136,40 @@
 <body>
     
 <?php
+    
+    // ||--------------Sprawdzanie Logowania--------------||
 
     if(isset($_POST['login_email']) and isset($_POST['login_pass'])){
         if($_POST['login_email'] == $login and $_POST['login_pass'] == $pass){
             $_SESSION['confirmed'] = true;
         }
     }
+    
+    // ||--------------Sprawdzanie Wylogowywania--------------||
+    
     elseif(isset($_POST['wyloguj'])){
         $_SESSION['confirmed'] = false;
     }
 
-
+    // ||--------------Zalogowanie--------------||
+    
     if($_SESSION['confirmed']){
+        
+        // ||--------------Usuwanie Strony--------------||
         if(CheckPost('usun')){
             UsunPodstrone($_POST['usun']);
         }
+        
+        // ||--------------Ekran Edytowania Strony--------------||
         if(isset($_POST['edytuj'])){
             echo EdytujPodstrone($_POST['edytuj']);
         }
+        
+        // ||--------------Ekran Tworzenia Strony--------------||
         elseif(CheckPost('dodaj')){
             echo DodajNowaPodstrone();
         }
+        // ||--------------Tworzenie I Edytowanie Strony--------------||
         elseif(CheckPost('id') and CheckPost('tytul') and CheckPost('content')){
             $conn = GetConn();
             $bool = 0;
@@ -174,13 +192,15 @@
             }
             ListaPodstron();
         }  
+        // ||--------------Pokazanie Listy Stron--------------||
         else{
             echo ListaPodstron();
         }
-        
+        // ||--------------Wczytanie Przycisku Wylogowywania--------------||
         echo Wylogowywanie();
     }
     else{
+        // ||--------------Formularz Logowania--------------||
         echo Logowanie();
     }
 ?>

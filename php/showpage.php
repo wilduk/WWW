@@ -1,5 +1,7 @@
 <?php
 
+
+// ||--------------Wczytanie Stony Z Bazy Danych--------------||
 function PokazPodstrone($id, $conn){
     $id_clear = htmlspecialchars($id);
     $query = "SELECT * FROM page_list WHERE id='$id_clear' LIMIT 1";

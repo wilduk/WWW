@@ -5,8 +5,10 @@
 	ini_set( 'display_errors', true );
 	/* po tym komentarzu będzie kod do dynamicznego ładowania stron */
 	$strona = 'html/main.html';
-    include('cfg.php');
-    include('showpage.php');
+    include('php/cfg.php');
+    include('php/showpage.php');
+
+// ||--------------Stare Funkcje Otwierające Statyczne Strony--------------||
 //    if(isset($_GET['idp'])){
 //        if($_GET['idp'] == '') $strona = 'html/main.html';
 //        if($_GET['idp'] == 'historia') $strona = 'html/historia.html';
@@ -20,11 +22,13 @@
 //	
 //	include($strona);
     
+// ||--------------Strony Otwierane Z Bazy Danych--------------||
     $conn = GetConn();
     if(isset($_GET['id'])){
         echo PokazPodstrone($_GET['id'],$conn);
     }
     else{
+        // Przy braku podanego id wczytaj stronę główną (id 1)
         echo PokazPodstrone(1,$conn);
     }
 	$nr_indeksu = '164404';
@@ -41,13 +45,14 @@
 		<meta name="author" content="Łukasz Łuckiewicz">
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 		<meta http-equiv="Content-Language" content="pl" />
-        <meta name="version" content="1.5">
+        <meta name="version" content="1.8">
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="js/kodzik.js" type="text/javascript"></script>
 	</head>
 	<body>
 	<?php
+        // ||--------------Template Strony Do Wypełnienia--------------||
 		echo("<script>loadsite()</script>");
 	?>
 	</body>

@@ -1,9 +1,8 @@
 <?php
 
-$temat;
-$tresc;
-$email;
 include("php/cfg.php");
+
+// ||--------------Formularz Kontaktowy--------------||
 
 function PokazKontakt()
 {
@@ -13,9 +12,9 @@ function PokazKontakt()
             <div class="kontakt">
             <form method="post" name"LoginForm" enctype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'">
                 <table class="kontakt">
-                    <tr><td class="log4_t">[temat]</td><td>'.$temat='<input type="text" name="temat" class="kontakt" /></td></tr>
-                    <tr><td class="log4_t">[email]</td><td>'.$email='<input type="text" name="email" class="kontakt" /></td></tr>
-                    <tr><td class="log4_t">[tresc]</td><td>'.$tresc='<textarea id="content" name="tresc" class="kontakt" /></textarea></td></tr>
+                    <tr><td class="log4_t">[temat]</td><td><input type="text" name="temat" class="kontakt" /></td></tr>
+                    <tr><td class="log4_t">[email]</td><td><input type="text" name="email" class="kontakt" /></td></tr>
+                    <tr><td class="log4_t">[tresc]</td><td><textarea id="content" name="tresc" class="kontakt" /></textarea></td></tr>
                     <tr><td>&nbsp;</td><td><input type="submit" name="x1_submit" class="kontakt" value="Wyślij" /></td></tr>
                 </table>
             </form>
@@ -24,6 +23,8 @@ function PokazKontakt()
     ';
     return $wynik;
 }
+
+// ||--------------Wysyłanie E-Maila--------------||
 
 function WyslijMailaKontakt($odbiorca)
 {
@@ -51,6 +52,8 @@ function WyslijMailaKontakt($odbiorca)
         echo '[wiadomosc_wyslana]';
     }
 }
+
+// ||--------------Przypominanie Hasła--------------||
 
 function PrzypomnijHaslo($odbiorca)
 {
