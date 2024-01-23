@@ -1,13 +1,13 @@
 var computed = false;
 var decimal = 0;
 
-function convert (entityform, from, to){
-	convertfrom = from.selectedIndex;
-	convertto = to.selectedIndex;
-	entryform.display.value = (entryform.input.value * from[convertfrom].value / to[convertto].value);
+function convert(entityform, from, to){
+	var convertfrom = from.selectedIndex;
+	var convertto = to.selectedIndex;
+	entityform.display.value = (entityform.input.value * from[convertfrom].value / to[convertto].value);
 }
 
-function addChar (input, character){
+function addChar(input, character){
 	if((character=='.' && decimal=="0") || character!="."){
 		(input.value == "" || input.value=="0") ? input.value = character : input.value += character
 		convert(input.form,input.form.measure1,input.form.measure2)
@@ -89,7 +89,10 @@ function loadsite(){
 }
 
 var $on = false;
+var $db = false;
 document.addEventListener("click", function (event) {
+    if($db){return};
+    $db = true;
 	if(event.target.tagName === "IMG") {
 		var $img = $(event.target);
 		if($on === false){
@@ -104,18 +107,17 @@ document.addEventListener("click", function (event) {
 			$("#cover").css('background-color', 'rgba(0, 0, 0, 0.5)');
 			$("#cover").css("z-index", '5');
 			$on = true;
-		}
-		else{
+		} else{
 			$("#picked").animate({
 				width: "50%"
 			},1500);
+            $on = false;
 			$("#picked").css({
 				"z-index": '10',
 				"position": 'static'
 			});
 			$("#cover").css('background-color', 'rgba(0, 0, 0, 0)');
 			$("#cover").css("z-index", '-1');
-			$on = false;
 			$("#picked").removeAttr("id");
 		}
 	}
@@ -132,4 +134,5 @@ document.addEventListener("click", function (event) {
 		$on = false;
 		$("#picked").removeAttr("id");
 	};
-})
+    setTimeout(function(){$db = false},1500);
+});
