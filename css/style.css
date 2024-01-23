@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-image: url('obrazki/tla/01.jpg');
+    background-image: url('../img/tla/01.jpg');
 	background-color: #000033;
     background-size: cover;
 	background-repeat: no-repeat;
@@ -76,6 +76,7 @@ h3 {
 }
 
 .podpis {
+	padding-top: "0px";
 	width: 50%;
 	font-style: italic;
 	text-align:center;

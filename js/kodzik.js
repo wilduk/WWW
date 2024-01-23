@@ -32,7 +32,7 @@ function changeBackground(number){
 	if(number === null){
 		number = "01"
 	}
-	document.body.style.backgroundImage ='url(obrazki/tla/'+number+".jpg)";
+	document.body.style.backgroundImage ='url(img/tla/'+number+".jpg)";
 	localStorage.setItem('background', number);
 }
 
@@ -73,7 +73,7 @@ function showtime(){
 }
 
 function loadsite(){
-	$.get('template.html', function(data){
+	$.get('html/template.html', function(data){
 		if (!$('.tresc').html()) {
             var content = $('body').html();
 			$('body').html(data);

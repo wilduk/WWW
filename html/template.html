@@ -14,20 +14,22 @@
 					<p id="zegarek" class="przybliz"></p>
 					<h2>Menu</h2>
 					<ul>
-						<li class="przybliz"><a href="main.html">Strona Główna</a></li>
-						<li class="przybliz"><a href="historia.html">O Nas</a></li>
-						<li class="przybliz"><a href="zolwie.html">Nasze Podopieczne</a></li>
-						<li class="przybliz"><a href="dbanie.html">Jak Zadbać o Żółwie</a></li>
-						<li class="przybliz"><a href="sukcesy.html">Nasze Sukcesy</a></li>
-						<li class="przybliz"><a href="zdjecia.html">Zdjęcia</a></li>
-						<li class="przybliz"><a href="kontakt.html">Kontakt</a></li>
+						<li class="przybliz"><a href="?idp=">Strona Główna</a></li>
+						<li class="przybliz"><a href="?idp=historia">O Nas</a></li>
+						<li class="przybliz"><a href="?idp=zolwie">Nasze Podopieczne</a></li>
+						<li class="przybliz"><a href="?idp=pielengnacja">Jak Zadbać o Żółwie</a></li>
+						<li class="przybliz"><a href="?idp=sukcesy">Nasze Sukcesy</a></li>
+						<li class="przybliz"><a href="?idp=galeria">Zdjęcia</a></li>
+						<li class="przybliz"><a href="?idp=kontakt">Kontakt</a></li>
 					</ul>
 					<script>
+						var debounce = false;
 						$(".przybliz").on({
 						"mouseover": function(){
 							$(this).animate({
 								'font-size': "20px"
 							},50);
+							wait(50);
 						},
 						"mouseout": function(){
 							$(this).animate({
